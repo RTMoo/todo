@@ -9,6 +9,7 @@ class Task(models.Model):
     description = models.TextField(max_length=512, blank=True, null=True)
     is_completed = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
+    objects = models.Manager()
 
     def __str__(self):
         return f"Task id={self.pk} User={self.user.email}"

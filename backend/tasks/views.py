@@ -1,10 +1,11 @@
-from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
-from rest_framework import status
-from tasks.serializers import TaskSerializer
-from tasks.models import Task
 from django.shortcuts import get_object_or_404
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
+from tasks.models import Task
+from tasks.serializers import TaskSerializer
 
 
 class TaskAPIView(APIView):
@@ -36,17 +37,14 @@ class TaskAPIView(APIView):
 
         task = get_object_or_404(Task, pk=pk, user=user)
         task.delete()
-        return Response(
-            {"message": f"User {user.email} deleted task id={pk}"},
-            status=status.HTTP_204_NO_CONTENT,
-        )
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, pk):
         user = request.user
 
         task = get_object_or_404(Task, pk=pk, user=user)
         serializer = self.serializer_class(
-            task, request.data, partial=True, context={"request": request}
+            instance=task, data=request.data, partial=True, context={"request": request}
         )
 
         if serializer.is_valid():

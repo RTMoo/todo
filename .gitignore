@@ -171,3 +171,4 @@ cython_debug/
 .pypirc
 
 backend/**/migrations/*
+.ruff_cache

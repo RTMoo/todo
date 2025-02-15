@@ -1,4 +1,5 @@
 import os
+from datetime import timedelta
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -138,4 +139,9 @@ SPECTACULAR_SETTINGS = {
     "TITLE": "Название вашего API",
     "DESCRIPTION": "Подробное описание вашего API",
     "VERSION": "1.0.0",
+}
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(hours=2),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
 }

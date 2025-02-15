@@ -12,4 +12,4 @@ class Task(models.Model):
     objects = models.Manager()
 
     def __str__(self):
-        return f"Task id={self.pk} User={self.user.email}"
+        return f"Task id={self.pk}"

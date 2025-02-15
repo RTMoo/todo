@@ -14,8 +14,8 @@ class TaskAPIView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, pk=None):
-        user = request.user
         query_dict = request.GET
+        user = request.user.id
 
         if pk is not None:
             task = get_object_or_404(Task, pk=pk, user=user)
@@ -30,7 +30,7 @@ class TaskAPIView(APIView):
 
             return Response(status=status.HTTP_204_NO_CONTENT)
 
-        tasks = Task.objects.filter(user=user)
+        tasks = Task.objects.filter(user=request.user.id)
         serializer = self.serializer_class(tasks, many=True)
         return Response(data=serializer.data, status=status.HTTP_200_OK)
 
@@ -45,14 +45,14 @@ class TaskAPIView(APIView):
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request, pk):
-        user = request.user
+        user = request.user.id
 
         task = get_object_or_404(Task, pk=pk, user=user)
         task.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
     def patch(self, request, pk):
-        user = request.user
+        user = request.user.id
 
         task = get_object_or_404(Task, pk=pk, user=user)
         serializer = self.serializer_class(

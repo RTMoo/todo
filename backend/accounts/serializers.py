@@ -6,9 +6,9 @@ from accounts.models import CustomUser
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
-    def validate(self, attrs):
-        email = attrs.get("email")
-        password = attrs.get("password")
+    def validate(self, data):
+        email = data.get("email")
+        password = data.get("password")
 
         if email and password:
             user = authenticate(
@@ -19,9 +19,13 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         else:
             raise serializers.ValidationError("Необходимо указать email и пароль")
 
-        data = super().validate(attrs)
-        data["email"] = user.email
-        return data
+        refresh = self.get_token(user)
+
+        return {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "email": user.email,
+        }
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
@@ -45,14 +49,13 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         model = CustomUser
         fields = ["email", "password", "password2"]
 
-    def validate_email(self, value):
-        if CustomUser.objects.filter(email=value).exists():
-            raise serializers.ValidationError("That email already exists")
-        return value
-
     def validate(self, data):
+        if CustomUser.objects.only("id").filter(email=data["email"]).exists():
+            raise serializers.ValidationError({"email": "That email already exists"})
+
         if data["password"] != data["password2"]:
-            raise serializers.ValidationError("Password error")
+            raise serializers.ValidationError({"password": "Passwords do not match"})
+
         return data
 
     def create(self, validated_data):

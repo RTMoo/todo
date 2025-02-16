@@ -1,3 +1,4 @@
+from django.core.exceptions import FieldDoesNotExist
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
@@ -47,20 +48,35 @@ class TaskAPIView(APIView):
     def delete(self, request, pk):
         user = request.user.id
 
-        task = get_object_or_404(Task, pk=pk, user=user)
-        task.delete()
-        return Response(status=status.HTTP_204_NO_CONTENT)
+        deleted_count, _ = Task.objects.filter(pk=pk, user=user).delete()
 
-    def patch(self, request, pk):
-        user = request.user.id
+        if deleted_count == 0:
+            return Response(
+                {"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND
+            )
 
-        task = get_object_or_404(Task, pk=pk, user=user)
-        serializer = self.serializer_class(
-            instance=task, data=request.data, partial=True, context={"request": request}
+        return Response(
+            {"message": "Task deleted successfully"}, status=status.HTTP_204_NO_CONTENT
         )
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(data=serializer.data, status=status.HTTP_200_OK)
+    def patch(self, request, pk):
+        user_id = request.user.id
 
-        return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        try:
+            updated_rows = Task.objects.filter(pk=pk, user_id=user_id).update(
+                **request.data
+            )
+
+            if updated_rows == 0:
+                return Response(
+                    {"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND
+                )
+
+            return Response(
+                {"message": "Task updated successfully"}, status=status.HTTP_200_OK
+            )
+
+        except FieldDoesNotExist:
+            return Response(
+                {"message": "Don't valide fields"}, status=status.HTTP_200_OK
+            )

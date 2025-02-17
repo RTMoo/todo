@@ -2,7 +2,7 @@ from tasks.models import Task
 
 
 def filtration_data(request, query_dict):
-    user = request.user
+    user = request.user.id
     is_completed = query_dict.get("is_completed", None)
     created_at = query_dict.get("created_at", None)
 
@@ -19,9 +19,9 @@ def filtration_data(request, query_dict):
     if is_completed is not None:
         filters["is_completed"] = is_completed
 
-    data = Task.objects.filter(**filters)
-
     if created_at:
-        data = data.order_by(created_at)
+        data = Task.objects.filter(**filters).order_by(created_at)
+    else:
+        data = Task.objects.filter(**filters)
 
-    return data if data.exists() else False
+    return data if data else False

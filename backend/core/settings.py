@@ -38,11 +38,13 @@ INSTALLED_APPS = [
     "rest_framework_simplejwt.token_blacklist",
     "drf_spectacular",
     "silk",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -148,3 +150,7 @@ SIMPLE_JWT = {
     "USER_ID_FIELD": "id",  # Поле ID в модели пользователя
     "USER_ID_CLAIM": "user_id",  # Какое поле в токене отвечает за ID
 }
+
+# CORS
+CORS_ALLOWED_ORIGINS = ["http://localhost:5173"]
+CORS_ALLOW_ALL_ORIGINS = True

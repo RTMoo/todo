@@ -1,9 +1,13 @@
-import React from 'react';
+import Nav from '../components/Nav';
+import TaskList from '../components/TaskList';
 
 const Home = () => {
-    const email = localStorage.getItem('email');
+
     return (
-        <div>{email}</div>
+        <div className="flex w-full h-full">
+            <Nav />
+            <TaskList />
+        </div>
     )
 }
 

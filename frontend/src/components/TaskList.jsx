@@ -1,26 +1,7 @@
-import React, { useEffect, useState } from "react";
 
-import api from "../api";
 
-const TaskList = () => {
-    const [tasks, setTasks] = useState([]);
-    const [loading, setLoading] = useState(true);
-
-    useEffect(() => {
-        const getUserTasks = async () => {
-            try {
-                const response = await api.get("api/tasks/");
-                setTasks(response.data);  // Записываем данные в состояние
-            } catch (error) {
-                console.error("Ошибка при загрузке задач:", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-
-        getUserTasks();
-    }, []);
-
+const TaskList = ({ tasks, loading }) => {
+    
     if (loading) return <p>Загрузка...</p>;
         
     return (

@@ -1,19 +1,20 @@
 import React, { useState } from 'react';
 import NavElem from './NavElem';
-import AddTaskModal from './AddTaskModal';
+import { useNavigate } from "react-router-dom";
 
-const Nav = ({ updateTasks }) => {
+
+const Nav = () => {
     const email = localStorage.getItem('email');
-    const [isFormVisible, setIsFormVisible] = useState(false);
+    const navigate = useNavigate();
+
 
     return (
-        <nav className="flex flex-col w-70 bg-sky-100 h-screen px-4">
+        <nav className="flex flex-col w-60 bg-sky-100 h-screen px-4 fixed mr-60">
             <div className="py-3 px-2 font-medium text-md">
                 {email}
             </div>
-            <NavElem title='Добавить задачу' onClick={() => setIsFormVisible(true)} />
-            <NavElem title='Поиск' />
-            {isFormVisible && <AddTaskModal onClose={() => setIsFormVisible(false)} updateTasks={updateTasks} />} {/* <-- Передаем updateTasks */}
+            <NavElem title='Создать' onClick={() => navigate('/?view=create')} />
+            <NavElem title='Задачи' onClick={() => navigate('/?view=list')} />
         </nav>
     );
 };

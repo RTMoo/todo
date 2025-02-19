@@ -1,11 +1,15 @@
 import Nav from '../components/Nav';
 import TaskList from '../components/TaskList';
+import TaskAdd from '../components/TaskAdd';
 import { useEffect, useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import api from '../api';
 
 const Home = () => {
     const [tasks, setTasks] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [searchParams] = useSearchParams();
+    const view = searchParams.get("view") || "list";
 
     useEffect(() => {
         getUserTasks();
@@ -24,8 +28,8 @@ const Home = () => {
 
     return (
         <div className="flex w-full h-full">
-            <Nav updateTasks={getUserTasks}/>
-            <TaskList tasks={tasks} loading={loading}/>
+            <Nav />
+            { view === 'list' ? <TaskList tasks={tasks} loading={loading}/> : <TaskAdd />}
         </div>
     )
 }

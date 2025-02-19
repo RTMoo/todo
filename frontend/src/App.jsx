@@ -6,8 +6,6 @@ import Home from './pages/Home'
 import TaskInfo from './components/TaskInfo';
 import ProtectedRoute from './components/ProtectedRoute'
 
-
-
 const App = () => {
     return (
         <BrowserRouter>

@@ -27,7 +27,7 @@ const TaskInfo = () => {
     return (
         <div className="flex w-full h-full">
             <Nav />
-            <div className="flex flex-col">
+            <div className="flex flex-col ml-80">
                 {Object.entries(task).map(([key, value]) => (
                     <p key={key}>
                         {key}: {`${value}`}
@@ -35,7 +35,6 @@ const TaskInfo = () => {
                 ))}
             </div>
         </div>
-
     )
 }
 

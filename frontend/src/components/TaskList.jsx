@@ -1,6 +1,26 @@
 import TaskElem from "./TaskElem";
+import { useEffect, useState } from "react";
+import api from "../api";
 
-const TaskList = ({ tasks, loading }) => {
+const TaskList = () => {
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    
+    const getUserTasks = async () => {
+        try {
+            const response = await api.get("api/tasks/");
+            setTasks(response.data);
+        } catch (error) {
+            console.error("Ошибка при загрузке задач:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        getUserTasks();
+    }, []);
+
     if (loading) return <p>Загрузка...</p>;
 
     return (
@@ -15,7 +35,7 @@ const TaskList = ({ tasks, loading }) => {
                             key={task.id} 
                             id={task.id} 
                             title={task.title} 
-                            is_completed={task.is_completed} 
+                            setTasks={setTasks}
                         />
                     ))}
                 </div>

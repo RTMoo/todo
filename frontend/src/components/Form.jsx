@@ -38,6 +38,14 @@ const Form = ({ route, method }) => {
             setLoading(false);
         }
     }
+
+    if (loading) {
+        return (
+            <div>
+                Загрузка
+            </div>
+        )
+    }
     return (
         <div className='w-full flex justify-center items-center h-screen bg-gray-200'>
             <div className='bg-white rounded-xl drop-shadow-md w-full min-w-xs w-md flex flex-col items-center mb-20 px-5 pt-15 pb-5'>

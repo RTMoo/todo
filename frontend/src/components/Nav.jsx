@@ -1,8 +1,7 @@
-import React, { useState } from 'react';
 import NavElem from './NavElem';
 import { useNavigate } from "react-router-dom";
 import api from '../api'
-import { REFRESH_TOKEN, ACCESS_TOKEN } from '../constants';
+import { REFRESH_TOKEN } from '../constants';
 
 const Nav = () => {
     const email = localStorage.getItem('email');

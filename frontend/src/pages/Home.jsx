@@ -13,7 +13,7 @@ const Home = () => {
 
     useEffect(() => {
         getUserTasks();
-    }, []);
+    }, [view]);
     
     const getUserTasks = async () => {
         try {

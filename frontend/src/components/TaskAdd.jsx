@@ -18,14 +18,14 @@ const TaskAdd = () => {
 
         try {
             await api.post("/api/tasks/", taskData);
-            navigate('/');
+            navigate('/?view=list');
         } catch (error) {
             console.error("Ошибка при создании задачи:", error);
         }
     };
 
     return (
-        <div className="p-10 ml-65 mr-5 w-full bg-white mx-auto mt-10">
+        <div className="ml-70 mr-10 w-full bg-white mx-auto mt-10">
             <h2 className="text-xl font-bold mb-5">Создать задачу</h2>
             <Field label="Название" onChange={(e) => setTaskName(e.target.value)} />
             <Field label="Описание" onChange={(e) => setTaskDescription(e.target.value)} />

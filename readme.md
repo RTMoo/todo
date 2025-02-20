@@ -20,16 +20,18 @@
 ## Установка
 
 ### Backend
-
+### todo/
 1. Установите зависимости:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-2. Примените миграции:
+### todo/backend
+2. Примените миграции :
 
    ```bash
+   python manage.py makemigrations
    python manage.py migrate
    ```
 
@@ -46,7 +48,7 @@
    ```
 
 ### Frontend
-
+### todo/frontend/
 1. Установите зависимости:
 
    ```bash

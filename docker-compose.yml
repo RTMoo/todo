@@ -1,0 +1,39 @@
+services:
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      - REDIS_HOST=redis
+    depends_on:
+      - redis
+    env_file:
+      - .env
+    volumes:
+      - .backend:/backend/  # Оставь закомментированным, если всё работает
+
+  redis:
+    image: redis:alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    volumes:
+      - ./frontend:/app  # Для разработки, можно удалить в проде
+      - /app/node_modules  # Чтобы не перезаписывались зависимости
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000  # Если React, можно передавать API URL
+
+volumes:
+  redis_data:

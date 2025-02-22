@@ -157,3 +157,14 @@ CORS_ALLOW_ALL_ORIGINS = True
 CORS_ALLOW_METHODS = ["GET", "POST", "PATCH", "DELETE"]
 CORS_ALLOW_HEADERS = ["Authorization", "Content-Type"]
 CORS_MAX_AGE = 600  # Кэшировать preflight на 10 минут
+
+# Redis
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://redis:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        },
+    }
+}

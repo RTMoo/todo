@@ -26,7 +26,7 @@ class TaskAPIView(APIView):
             if not data:
                 task = get_object_or_404(Task, pk=pk, user=user)
                 data = self.serializer_class(instance=task).data
-                cache.set(key, data, 10)
+                cache.set(key, data, 60 * 5)
 
             return Response(data=data, status=status.HTTP_200_OK)
 
@@ -37,7 +37,7 @@ class TaskAPIView(APIView):
                 tasks = filtration_data(request=request, query_dict=query_dict)
                 if tasks:
                     data = self.serializer_class(instance=tasks, many=True).data
-                    cache.set(key, data, 10)
+                    cache.set(key, data, 60 * 5)
                     return Response(data=data, status=status.HTTP_200_OK)
 
                 return Response(status=status.HTTP_204_NO_CONTENT)
@@ -50,7 +50,7 @@ class TaskAPIView(APIView):
         if not data:
             tasks = Task.objects.filter(user=user)
             data = self.serializer_class(instance=tasks, many=True).data
-            cache.set(key, data, 10)
+            cache.set(key, data, 60 * 5)
 
         return Response(data=data, status=status.HTTP_200_OK)
 

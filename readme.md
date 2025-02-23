@@ -5,7 +5,7 @@
 ## Стек технологий
 
 - **Backend**: Django, Django REST Framework (DRF), Django Simple JWT
-- **Frontend**: React, React Router DOM
+- **Frontend**: HTML, CSS, Tailwindcss, React, React Router DOM 
 - **База данных**: SQLite3
 - **Аутентификация**: JWT
 
@@ -19,47 +19,12 @@
 
 ## Установка
 
-### Backend
-### todo/
-1. Установите зависимости:
+### Docker-compose
 
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-### todo/backend
-2. Примените миграции :
-
-   ```bash
-   python manage.py makemigrations
-   python manage.py migrate
-   ```
-
-3. Создайте суперпользователя:
-
-   ```bash
-   python manage.py createsuperuser
-   ```
-
-4. Запустите сервер:
-
-   ```bash
-   python manage.py runserver
-   ```
-
-### Frontend
-### todo/frontend/
-1. Установите зависимости:
-
-   ```bash
-   npm install
-   ```
-
-2. Запустите приложение:
-
-   ```bash
-   npm run dev
-   ```
+Установите docker и docker-compose (например homebrew на macos) и в корне проекта запустите команду
+```bash
+docker-compose up -d
+```
 
 ## API
 

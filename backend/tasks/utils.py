@@ -1,5 +1,7 @@
 import hashlib
 
+from django.core.cache import cache
+
 from tasks.models import Task
 
 
@@ -23,3 +25,11 @@ def filtration_data(request, query_dict):
 
 def hashing(data):
     return hashlib.md5(str(data).encode()).hexdigest()
+
+
+def cache_delete(user=None, pk=None):
+    cache.delete_pattern(f"task_filter_{user}_*")
+    if user:
+        cache.delete(f"tasks_{user}")
+        if pk:
+            cache.delete(f"task_{user}_{pk}")

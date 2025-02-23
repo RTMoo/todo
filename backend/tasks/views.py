@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 
 from tasks.models import Task
 from tasks.serializers import TaskSerializer
-from tasks.utils import filtration_data, hashing
+from tasks.utils import cache_delete, filtration_data, hashing
 
 
 class TaskAPIView(APIView):
@@ -49,7 +49,7 @@ class TaskAPIView(APIView):
 
         if not data:
             tasks = Task.objects.filter(user=user)
-            data = self.serializer_class(tasks, many=True).data
+            data = self.serializer_class(instance=tasks, many=True).data
             cache.set(key, data, 10)
 
         return Response(data=data, status=status.HTTP_200_OK)
@@ -60,6 +60,9 @@ class TaskAPIView(APIView):
         )
         if serializer.is_valid():
             serializer.save()
+            user = request.user.id
+            cache_delete(user=user)
+
             return Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(data=serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -71,31 +74,35 @@ class TaskAPIView(APIView):
 
         if deleted_count == 0:
             return Response(
-                {"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND
+                data={"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND
             )
 
+        cache_delete(user=user, pk=pk)
+
         return Response(
-            {"message": "Task deleted successfully"}, status=status.HTTP_204_NO_CONTENT
+            data={"message": "Task deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
         )
 
     def patch(self, request, pk):
-        user_id = request.user.id
+        user = request.user.id
 
         try:
-            updated_rows = Task.objects.filter(pk=pk, user_id=user_id).update(
-                **request.data
-            )
+            updated_rows = Task.objects.filter(pk=pk, user=user).update(**request.data)
 
             if updated_rows == 0:
                 return Response(
-                    {"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND
+                    data={"error": "Task not found"}, status=status.HTTP_404_NOT_FOUND
                 )
 
+            cache_delete(user=user, pk=pk)
+
             return Response(
-                {"message": "Task updated successfully"}, status=status.HTTP_200_OK
+                data={"message": "Task updated successfully"}, status=status.HTTP_200_OK
             )
 
         except FieldDoesNotExist:
             return Response(
-                {"message": "Don't valide fields"}, status=status.HTTP_200_OK
+                data={"message": "Don't valide fields"},
+                status=status.HTTP_400_BAD_REQUEST,
             )

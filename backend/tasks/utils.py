@@ -1,3 +1,5 @@
+import hashlib
+
 from tasks.models import Task
 
 
@@ -17,3 +19,7 @@ def filtration_data(request, query_dict):
         data = Task.objects.filter(**filters)
 
     return data
+
+
+def hashing(data):
+    return hashlib.md5(str(data).encode()).hexdigest()

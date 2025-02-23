@@ -1,22 +1,19 @@
-# Используем лёгкий образ
+# Используем лёгкий образ Python
 FROM python:3.12-slim
 
-# Устанавливаем рабочую директорию
-WORKDIR /app
+# Устанавливаем рабочую директорию внутри контейнера
+WORKDIR /backend
 
-# Копируем файлы зависимостей
-COPY ../requirements.txt .
+# Копируем файлы зависимостей из backend
+COPY ./requirements.txt .
 
 # Обновляем pip и устанавливаем зависимости
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-# Копируем весь код проекта
+# Копируем весь код из backend
 COPY . .
 
-# Указываем переменную окружения для SQLite или PostgreSQL
-ENV DATABASE_URL=sqlite:///db.sqlite3
-
-# Открываем порт для Django
+# Открываем порт
 EXPOSE 8000
 
 # Запускаем сервер
